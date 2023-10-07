@@ -1,9 +1,8 @@
 package com.valcon.WeatherApp.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 public class City {
@@ -13,6 +12,9 @@ public class City {
     private Long id;
     private String name;
     private String countryCode;
+
+    @OneToOne(mappedBy = "city")
+    private FiveDaysForecast fiveDaysForecast;
 
     public City() {
     }
@@ -44,5 +46,13 @@ public class City {
 
     public void setCountryCode(String countryCode) {
         this.countryCode = countryCode;
+    }
+
+    public FiveDaysForecast getFiveDaysForecast() {
+        return fiveDaysForecast;
+    }
+
+    public void setFiveDaysForecast(FiveDaysForecast fiveDaysForecast) {
+        this.fiveDaysForecast = fiveDaysForecast;
     }
 }

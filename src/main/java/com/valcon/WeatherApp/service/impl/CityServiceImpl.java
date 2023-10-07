@@ -2,6 +2,7 @@ package com.valcon.WeatherApp.service.impl;
 
 import com.valcon.WeatherApp.dto.CityResponseDTO;
 import com.valcon.WeatherApp.mapper.CityMapper;
+import com.valcon.WeatherApp.model.City;
 import com.valcon.WeatherApp.repository.CityRepository;
 import com.valcon.WeatherApp.service.CityService;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,9 +21,12 @@ public class CityServiceImpl implements CityService {
     @Transactional(readOnly = true)
     @Override
     public List<CityResponseDTO> getAll() {
-        return cityRepository.findAll()
+        return  getAllCities()
                 .stream()
                 .map(CityMapper::mapToDTO)
                 .toList();
+    }
+    public List<City> getAllCities(){
+        return cityRepository.findAll();
     }
 }

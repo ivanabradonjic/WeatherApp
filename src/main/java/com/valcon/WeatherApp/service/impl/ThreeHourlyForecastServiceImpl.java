@@ -21,7 +21,7 @@ public class ThreeHourlyForecastServiceImpl implements ThreeHourlyForecastServic
         this.threeHourlyForecastRepository = threeHourlyForecastRepository;
     }
 
-    public void saveOne(OwmThreeHourlyForecastDTO owmThreeHourlyForecastDTO, FiveDaysForecast fiveDaysForecast) {
+    public ThreeHourlyForecast saveOne(OwmThreeHourlyForecastDTO owmThreeHourlyForecastDTO, FiveDaysForecast fiveDaysForecast) {
 
         /*double temp = owmThreeHourlyForecastDTO.getMain().getTemp();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -31,7 +31,7 @@ public class ThreeHourlyForecastServiceImpl implements ThreeHourlyForecastServic
         ThreeHourlyForecast threeHourlyForecast = ThreeHourlyForecastMapper.mapToEntity(owmThreeHourlyForecastDTO);
         threeHourlyForecast.setFiveDaysForecast(fiveDaysForecast);
 
-        threeHourlyForecastRepository.save(threeHourlyForecast);
+        return threeHourlyForecastRepository.save(threeHourlyForecast);
 
     }
 
@@ -58,7 +58,7 @@ public class ThreeHourlyForecastServiceImpl implements ThreeHourlyForecastServic
         return sumOfTemperature / numberOfTemperature;
     }
 
-    public void checkIntervalParameters(FiveDaysForecast fiveDaysForecast, LocalDateTime startDateTime, LocalDateTime endDateTime){
+    private void checkIntervalParameters(FiveDaysForecast fiveDaysForecast, LocalDateTime startDateTime, LocalDateTime endDateTime){
 
         LocalDateTime firstStartDateTime = getFirstDateTime(fiveDaysForecast);
 

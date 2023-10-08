@@ -6,10 +6,12 @@ import com.valcon.WeatherApp.model.City;
 import java.util.List;
 
 public interface CityService {
-    City getByName(String name);
+    CityResponseDTO getByName(String name);
 
     List<CityResponseDTO> getAll();
     List<City> getAllCities();
 
-    City getById(Long cityId);
+    CityResponseDTO getById(Long id);
+
+    City getCityById(Long cityId);
 }

@@ -1,6 +1,7 @@
 package com.valcon.WeatherApp.service.impl;
 
 import com.valcon.WeatherApp.dto.CityResponseDTO;
+import com.valcon.WeatherApp.exception.ResourceNotFoundException;
 import com.valcon.WeatherApp.mapper.CityMapper;
 import com.valcon.WeatherApp.model.City;
 import com.valcon.WeatherApp.repository.CityRepository;
@@ -20,8 +21,9 @@ public class CityServiceImpl implements CityService {
     }
 
     @Override
-    public City getByName(String name) {
-        return cityRepository.findByName(name).orElseThrow(() -> new EntityNotFoundException("City with name"+name+"hasn't been found"));
+    public CityResponseDTO getByName(String name) {
+        City foundedCity = cityRepository.findByName(name).orElseThrow(() -> new ResourceNotFoundException("City with name"+name+"hasn't been found"));
+        return CityMapper.mapToDTO(foundedCity);
     }
 
     @Transactional(readOnly = true)
@@ -37,7 +39,11 @@ public class CityServiceImpl implements CityService {
     }
 
     @Override
-    public City getById(Long id) {
-        return cityRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("City with id = "+ id+"hasn't been found"));
+    public City getCityById(Long id) {
+        return cityRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("City with id = "+ id+"hasn't been found"));
+    }
+
+    public CityResponseDTO getById(Long id){
+        return CityMapper.mapToDTO(getCityById(id));
     }
 }

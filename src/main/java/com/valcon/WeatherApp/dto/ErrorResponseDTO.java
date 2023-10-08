@@ -2,13 +2,13 @@ package com.valcon.WeatherApp.dto;
 
 import java.time.LocalDateTime;
 
-public class ErrorResponse {
+public class ErrorResponseDTO {
 
         private LocalDateTime timestamp;
         private String status;
         private String message;
 
-        public ErrorResponse(LocalDateTime timestamp, String status, String message) {
+        public ErrorResponseDTO(LocalDateTime timestamp, String status, String message) {
             this.timestamp = timestamp;
             this.status = status;
             this.message = message;

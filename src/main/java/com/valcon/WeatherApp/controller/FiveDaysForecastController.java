@@ -1,6 +1,7 @@
 package com.valcon.WeatherApp.controller;
 
 
+import com.valcon.WeatherApp.controller.api.FiveDaysForecastControllerApi;
 import com.valcon.WeatherApp.dto.CityAvgTempResponseDTO;
 import com.valcon.WeatherApp.dto.TimeIntervalParametersDTO;
 import com.valcon.WeatherApp.service.FiveDaysForecastService;
@@ -10,7 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/fiveDaysForecasts")
-public class FiveDaysForecastController {
+public class FiveDaysForecastController implements FiveDaysForecastControllerApi {
     private final FiveDaysForecastService fiveDaysForecastService;
 
     public FiveDaysForecastController(FiveDaysForecastService fiveDaysForecastService) {

@@ -8,6 +8,6 @@ public final class CityMapper {
     }
 
     public static CityResponseDTO mapToDTO(City city) {
-        return new CityResponseDTO(city.getName());
+        return new CityResponseDTO(city.getId(),city.getName());
     }
 }

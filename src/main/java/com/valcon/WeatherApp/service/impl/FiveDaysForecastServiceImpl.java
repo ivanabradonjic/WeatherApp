@@ -1,7 +1,11 @@
 package com.valcon.WeatherApp.service.impl;
 
+import com.valcon.WeatherApp.comparator.AvgTempComparator;
+import com.valcon.WeatherApp.dto.CityAvgTempResponseDTO;
+import com.valcon.WeatherApp.dto.TimeIntervalParametersDTO;
 import com.valcon.WeatherApp.dto.OwmFiveDaysForecastDTO;
 import com.valcon.WeatherApp.dto.OwmThreeHourlyForecastDTO;
+import com.valcon.WeatherApp.mapper.CityAvgTempMapper;
 import com.valcon.WeatherApp.model.City;
 import com.valcon.WeatherApp.model.FiveDaysForecast;
 import com.valcon.WeatherApp.repository.FiveDaysForecastRepository;
@@ -14,6 +18,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import javax.annotation.PostConstruct;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -70,6 +77,31 @@ public class FiveDaysForecastServiceImpl implements FiveDaysForecastService {
             threeHourlyForecastService.saveOne(owmThreeHourlyForecastDTO, fiveDaysForecast);
         }
 
+    }
+
+    public List<CityAvgTempResponseDTO> allCityAverageTemperatures(TimeIntervalParametersDTO timeIntervalParametersDTO){
+        List<CityAvgTempResponseDTO> allCitiesAvgTempResponseDTO = new ArrayList<>();
+        List<City> allCities = cityService.getAllCities();
+        double averageTemperature=0.0;
+        for(City city: allCities){
+           CityAvgTempResponseDTO cityAvgTempResponseDTO= averageTemperatureByCity(city.getId(), timeIntervalParametersDTO);
+           allCitiesAvgTempResponseDTO.add(cityAvgTempResponseDTO);
+
+        }
+        Collections.sort(allCitiesAvgTempResponseDTO, new AvgTempComparator());
+        return allCitiesAvgTempResponseDTO;
+
+    }
+    public CityAvgTempResponseDTO averageTemperatureByCity(Long cityId, TimeIntervalParametersDTO timeIntervalParametersDTO){
+        City foundedCity = cityService.getById(cityId);
+        FiveDaysForecast foundedFiveDaysForecast = fiveDaysForecastRepository.findByCity(foundedCity);
+        LocalDateTime startDateTime = timeIntervalParametersDTO.getStartDateTime();
+        LocalDateTime endDateTime = timeIntervalParametersDTO.getEndDateTime();
+       /* DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime startDateTime = LocalDateTime.parse(timeIntervalParametersDTO.getStartDateTime(), formatter);
+        LocalDateTime endDateTime = LocalDateTime.parse(timeIntervalParametersDTO.getEndDateTime(), formatter);*/
+        double cityAvgTemp = threeHourlyForecastService.averageTemperatureInInterval(foundedFiveDaysForecast,startDateTime,endDateTime);
+        return CityAvgTempMapper.mapToDTO(foundedCity.getName(),cityAvgTemp);
     }
 
 

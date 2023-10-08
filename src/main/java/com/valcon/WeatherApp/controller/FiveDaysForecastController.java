@@ -1,12 +1,10 @@
 package com.valcon.WeatherApp.controller;
 
 
-import com.valcon.WeatherApp.model.ThreeHourlyForecast;
+import com.valcon.WeatherApp.dto.CityAvgTempResponseDTO;
+import com.valcon.WeatherApp.dto.TimeIntervalParametersDTO;
 import com.valcon.WeatherApp.service.FiveDaysForecastService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -19,5 +17,13 @@ public class FiveDaysForecastController {
         this.fiveDaysForecastService = fiveDaysForecastService;
     }
 
+    @GetMapping("/{id}")
+    public CityAvgTempResponseDTO averageTemperatureByCity(@PathVariable Long cityId ,@RequestBody TimeIntervalParametersDTO timeIntervalParametersDTO){
+        return fiveDaysForecastService.averageTemperatureByCity(cityId, timeIntervalParametersDTO);
+    }
+    @GetMapping
+    public List<CityAvgTempResponseDTO> allCitiesAverageTemperatures(@RequestBody TimeIntervalParametersDTO timeIntervalParametersDTO){
+        return fiveDaysForecastService.allCityAverageTemperatures(timeIntervalParametersDTO);
+    }
 
 }

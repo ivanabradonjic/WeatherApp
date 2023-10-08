@@ -1,9 +1,13 @@
 package com.valcon.WeatherApp.service;
 
-import com.valcon.WeatherApp.model.ThreeHourlyForecast;
+import com.valcon.WeatherApp.dto.CityAvgTempResponseDTO;
+import com.valcon.WeatherApp.dto.TimeIntervalParametersDTO;
 
 import java.util.List;
 
 public interface FiveDaysForecastService {
+
+    public CityAvgTempResponseDTO averageTemperatureByCity(Long cityId, TimeIntervalParametersDTO timeIntervalParametersDTO);
+    public List<CityAvgTempResponseDTO> allCityAverageTemperatures(TimeIntervalParametersDTO timeIntervalParametersDTO);
 
 }

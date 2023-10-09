@@ -1,5 +1,5 @@
 # WeatherApp
-An application for calculating average temperatures for cities
+An application for calculating average temperatures for cities in time interval 
 
 ## Technologies Used
 The following technologies were used in this project:

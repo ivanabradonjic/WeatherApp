@@ -84,7 +84,7 @@ public class FiveDaysForecastServiceImpl implements FiveDaysForecastService {
         List<City> allCities = cityService.getAllCities();
         double averageTemperature=0.0;
         for(City city: allCities){
-           CityAvgTempResponseDTO cityAvgTempResponseDTO= averageTemperatureByCity(city.getId(), timeIntervalParametersDTO);
+           CityAvgTempResponseDTO cityAvgTempResponseDTO= averageTemperatureByCity(city.getName(), timeIntervalParametersDTO);
            allCitiesAvgTempResponseDTO.add(cityAvgTempResponseDTO);
 
         }
@@ -92,15 +92,13 @@ public class FiveDaysForecastServiceImpl implements FiveDaysForecastService {
         return allCitiesAvgTempResponseDTO;
 
     }
-    public CityAvgTempResponseDTO averageTemperatureByCity(Long cityId, TimeIntervalParametersDTO timeIntervalParametersDTO){
-        City foundedCity = cityService.getById(cityId);
+    public CityAvgTempResponseDTO averageTemperatureByCity(String name, TimeIntervalParametersDTO timeIntervalParametersDTO){
+        City foundedCity = cityService.getByName(name);
         FiveDaysForecast foundedFiveDaysForecast = fiveDaysForecastRepository.findByCity(foundedCity);
         LocalDateTime startDateTime = timeIntervalParametersDTO.getStartDateTime();
         LocalDateTime endDateTime = timeIntervalParametersDTO.getEndDateTime();
-       /* DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        LocalDateTime startDateTime = LocalDateTime.parse(timeIntervalParametersDTO.getStartDateTime(), formatter);
-        LocalDateTime endDateTime = LocalDateTime.parse(timeIntervalParametersDTO.getEndDateTime(), formatter);*/
-        double cityAvgTemp = threeHourlyForecastService.averageTemperatureInInterval(foundedFiveDaysForecast,startDateTime,endDateTime);
+
+        int cityAvgTemp = threeHourlyForecastService.averageTemperatureInInterval(foundedFiveDaysForecast,startDateTime,endDateTime);
         return CityAvgTempMapper.mapToDTO(foundedCity.getName(),cityAvgTemp);
     }
 

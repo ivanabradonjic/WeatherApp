@@ -17,9 +17,9 @@ public class FiveDaysForecastController {
         this.fiveDaysForecastService = fiveDaysForecastService;
     }
 
-    @GetMapping("/{id}")
-    public CityAvgTempResponseDTO averageTemperatureByCity(@PathVariable Long cityId ,@RequestBody TimeIntervalParametersDTO timeIntervalParametersDTO){
-        return fiveDaysForecastService.averageTemperatureByCity(cityId, timeIntervalParametersDTO);
+    @GetMapping("/{name}")
+    public CityAvgTempResponseDTO averageTemperatureByCity(@PathVariable String name ,@RequestBody TimeIntervalParametersDTO timeIntervalParametersDTO){
+        return fiveDaysForecastService.averageTemperatureByCity(name, timeIntervalParametersDTO);
     }
     @GetMapping
     public List<CityAvgTempResponseDTO> allCitiesAverageTemperatures(@RequestBody TimeIntervalParametersDTO timeIntervalParametersDTO){

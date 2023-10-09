@@ -8,6 +8,6 @@ import java.time.LocalDateTime;
 
 public interface ThreeHourlyForecastService {
     public void saveOne(OwmThreeHourlyForecastDTO owmThreeHourlyForecastDTO, FiveDaysForecast fiveDaysForecast);
-    public double averageTemperatureInInterval(FiveDaysForecast fiveDaysForecast, LocalDateTime startDateTime, LocalDateTime endDateTime);
+    public int averageTemperatureInInterval(FiveDaysForecast fiveDaysForecast, LocalDateTime startDateTime, LocalDateTime endDateTime);
 
 }

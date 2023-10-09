@@ -15,6 +15,7 @@ import java.util.List;
 
 @Service
 public class ThreeHourlyForecastServiceImpl implements ThreeHourlyForecastService {
+    public static final double  KELVIN_CELSIUS_TEMP_DIFFERENCE = 273.15;
     private final ThreeHourlyForecastRepository threeHourlyForecastRepository;
 
     public ThreeHourlyForecastServiceImpl(ThreeHourlyForecastRepository threeHourlyForecastRepository) {
@@ -23,11 +24,6 @@ public class ThreeHourlyForecastServiceImpl implements ThreeHourlyForecastServic
 
     public void saveOne(OwmThreeHourlyForecastDTO owmThreeHourlyForecastDTO, FiveDaysForecast fiveDaysForecast) {
 
-        /*double temp = owmThreeHourlyForecastDTO.getMain().getTemp();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        LocalDateTime dateTime = LocalDateTime.parse(owmThreeHourlyForecastDTO.getDateTime(), formatter);
-        ThreeHourlyForecast threeHourlyForecast = new ThreeHourlyForecast(temp,dateTime,fiveDaysForecast);*/
-        //       fiveDaysForecast.getThreeHourlyForecasts().add(threeHourlyForecast);
         ThreeHourlyForecast threeHourlyForecast = ThreeHourlyForecastMapper.mapToEntity(owmThreeHourlyForecastDTO);
         threeHourlyForecast.setFiveDaysForecast(fiveDaysForecast);
 
@@ -35,30 +31,31 @@ public class ThreeHourlyForecastServiceImpl implements ThreeHourlyForecastServic
 
     }
 
-    public LocalDateTime getFirstDateTime(FiveDaysForecast fiveDaysForecast){
+    private LocalDateTime getFirstDateTime(FiveDaysForecast fiveDaysForecast){
 
         List<ThreeHourlyForecast> foundedThreeHourlyForecast = threeHourlyForecastRepository.findByFiveDaysForecast(fiveDaysForecast);
 
         return foundedThreeHourlyForecast.get(0).getDateTime();
     }
 
-    public double averageTemperatureInInterval(FiveDaysForecast fiveDaysForecast, LocalDateTime startDateTime, LocalDateTime endDateTime) {
+    public int averageTemperatureInInterval(FiveDaysForecast fiveDaysForecast, LocalDateTime startDateTime, LocalDateTime endDateTime) {
 
-        List<Double> foundedTemp;
         checkIntervalParameters(fiveDaysForecast, startDateTime,endDateTime);
 
-        foundedTemp = threeHourlyForecastRepository.findByDataTimeBetween(fiveDaysForecast, startDateTime.minusMinutes(169), endDateTime);
+        List<Double> foundedTemps = threeHourlyForecastRepository.findByDataTimeBetween(fiveDaysForecast, startDateTime.minusMinutes(169), endDateTime);
 
-        int numberOfTemperature = 0;
-        double sumOfTemperature = 0.0;
-        for (Double temp : foundedTemp) {
-            sumOfTemperature += temp;
-            numberOfTemperature++;
+        int numberOfTemp = 0;
+        double sumOfTemp = 0.0;
+        for (Double temp : foundedTemps) {
+            sumOfTemp += temp;
+            numberOfTemp++;
         }
-        return sumOfTemperature / numberOfTemperature;
+        double avgKelvinTemp = sumOfTemp/ numberOfTemp;
+        double avgCelsiusTemp = avgKelvinTemp -KELVIN_CELSIUS_TEMP_DIFFERENCE;
+        return Math.round((float)avgCelsiusTemp);
     }
 
-    public void checkIntervalParameters(FiveDaysForecast fiveDaysForecast, LocalDateTime startDateTime, LocalDateTime endDateTime){
+    private void checkIntervalParameters(FiveDaysForecast fiveDaysForecast, LocalDateTime startDateTime, LocalDateTime endDateTime){
 
         LocalDateTime firstStartDateTime = getFirstDateTime(fiveDaysForecast);
 

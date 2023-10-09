@@ -41,8 +41,14 @@ public class ThreeHourlyForecastServiceImpl implements ThreeHourlyForecastServic
     public int averageTemperatureInInterval(FiveDaysForecast fiveDaysForecast, LocalDateTime startDateTime, LocalDateTime endDateTime) {
 
         checkIntervalParameters(fiveDaysForecast, startDateTime, endDateTime);
+        List<Double> foundedTemps= new ArrayList<>();
 
-        List<Double> foundedTemps = threeHourlyForecastRepository.findByDataTimeBetween(fiveDaysForecast, startDateTime.minusMinutes(169), endDateTime);
+        if(startDateTime.isBefore(getFirstDateTime(fiveDaysForecast))){
+            foundedTemps = threeHourlyForecastRepository.findByDataTimeBetween(fiveDaysForecast, startDateTime, endDateTime);
+        }else {
+            foundedTemps = threeHourlyForecastRepository.findByDataTimeBetween(fiveDaysForecast, startDateTime.minusMinutes(169), endDateTime);
+
+        }
 
         int numberOfTemp = 0;
         double sumOfTemp = 0.0;
@@ -70,9 +76,7 @@ public class ThreeHourlyForecastServiceImpl implements ThreeHourlyForecastServic
             throw new InvalidIntervalParametersException("End date must be within 5 days from start date");
         }
 
-        if (startDateTime.isBefore(firstStartDateTime)) {
-            throw new InvalidIntervalParametersException("Start time must be after " + firstStartDateTime);
-        }
+
     }
 
 }

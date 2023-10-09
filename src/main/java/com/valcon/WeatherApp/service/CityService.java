@@ -6,7 +6,7 @@ import com.valcon.WeatherApp.model.City;
 import java.util.List;
 
 public interface CityService {
-    CityResponseDTO getByName(String name);
+    City getByName(String name);
 
     List<CityResponseDTO> getAll();
     List<City> getAllCities();

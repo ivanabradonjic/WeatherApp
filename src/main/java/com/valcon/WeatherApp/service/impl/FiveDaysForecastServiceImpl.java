@@ -79,27 +79,28 @@ public class FiveDaysForecastServiceImpl implements FiveDaysForecastService {
 
     }
 
-    public List<CityAvgTempResponseDTO> allCityAverageTemperatures(TimeIntervalParametersDTO timeIntervalParametersDTO){
+    public List<CityAvgTempResponseDTO> allCityAverageTemperatures(TimeIntervalParametersDTO timeIntervalParametersDTO) {
         List<CityAvgTempResponseDTO> allCitiesAvgTempResponseDTO = new ArrayList<>();
         List<City> allCities = cityService.getAllCities();
-        double averageTemperature=0.0;
-        for(City city: allCities){
-           CityAvgTempResponseDTO cityAvgTempResponseDTO= averageTemperatureByCity(city.getName(), timeIntervalParametersDTO);
-           allCitiesAvgTempResponseDTO.add(cityAvgTempResponseDTO);
+        double averageTemperature = 0.0;
+        for (City city : allCities) {
+            CityAvgTempResponseDTO cityAvgTempResponseDTO = averageTemperatureByCity(city.getName(), timeIntervalParametersDTO);
+            allCitiesAvgTempResponseDTO.add(cityAvgTempResponseDTO);
 
         }
         Collections.sort(allCitiesAvgTempResponseDTO, new AvgTempComparator());
         return allCitiesAvgTempResponseDTO;
 
     }
-    public CityAvgTempResponseDTO averageTemperatureByCity(String name, TimeIntervalParametersDTO timeIntervalParametersDTO){
+
+    public CityAvgTempResponseDTO averageTemperatureByCity(String name, TimeIntervalParametersDTO timeIntervalParametersDTO) {
         City foundedCity = cityService.getByName(name);
         FiveDaysForecast foundedFiveDaysForecast = fiveDaysForecastRepository.findByCity(foundedCity);
         LocalDateTime startDateTime = timeIntervalParametersDTO.getStartDateTime();
         LocalDateTime endDateTime = timeIntervalParametersDTO.getEndDateTime();
 
-        int cityAvgTemp = threeHourlyForecastService.averageTemperatureInInterval(foundedFiveDaysForecast,startDateTime,endDateTime);
-        return CityAvgTempMapper.mapToDTO(foundedCity.getName(),cityAvgTemp);
+        int cityAvgTemp = threeHourlyForecastService.averageTemperatureInInterval(foundedFiveDaysForecast, startDateTime, endDateTime);
+        return CityAvgTempMapper.mapToDTO(foundedCity.getName(), cityAvgTemp);
     }
 
 

@@ -15,23 +15,23 @@ import java.util.List;
 
 @Service
 public class ThreeHourlyForecastServiceImpl implements ThreeHourlyForecastService {
-    public static final double  KELVIN_CELSIUS_TEMP_DIFFERENCE = 273.15;
+    public static final double KELVIN_CELSIUS_TEMP_DIFFERENCE = 273.15;
     private final ThreeHourlyForecastRepository threeHourlyForecastRepository;
 
     public ThreeHourlyForecastServiceImpl(ThreeHourlyForecastRepository threeHourlyForecastRepository) {
         this.threeHourlyForecastRepository = threeHourlyForecastRepository;
     }
 
-    public ThreeHourlyForecast saveOne(OwmThreeHourlyForecastDTO owmThreeHourlyForecastDTO, FiveDaysForecast fiveDaysForecast) {
+    public void saveOne(OwmThreeHourlyForecastDTO owmThreeHourlyForecastDTO, FiveDaysForecast fiveDaysForecast) {
 
         ThreeHourlyForecast threeHourlyForecast = ThreeHourlyForecastMapper.mapToEntity(owmThreeHourlyForecastDTO);
         threeHourlyForecast.setFiveDaysForecast(fiveDaysForecast);
 
-        return threeHourlyForecastRepository.save(threeHourlyForecast);
+        threeHourlyForecastRepository.save(threeHourlyForecast);
 
     }
 
-    private LocalDateTime getFirstDateTime(FiveDaysForecast fiveDaysForecast){
+    private LocalDateTime getFirstDateTime(FiveDaysForecast fiveDaysForecast) {
 
         List<ThreeHourlyForecast> foundedThreeHourlyForecast = threeHourlyForecastRepository.findByFiveDaysForecast(fiveDaysForecast);
 
@@ -40,7 +40,7 @@ public class ThreeHourlyForecastServiceImpl implements ThreeHourlyForecastServic
 
     public int averageTemperatureInInterval(FiveDaysForecast fiveDaysForecast, LocalDateTime startDateTime, LocalDateTime endDateTime) {
 
-        checkIntervalParameters(fiveDaysForecast, startDateTime,endDateTime);
+        checkIntervalParameters(fiveDaysForecast, startDateTime, endDateTime);
 
         List<Double> foundedTemps = threeHourlyForecastRepository.findByDataTimeBetween(fiveDaysForecast, startDateTime.minusMinutes(169), endDateTime);
 
@@ -50,16 +50,16 @@ public class ThreeHourlyForecastServiceImpl implements ThreeHourlyForecastServic
             sumOfTemp += temp;
             numberOfTemp++;
         }
-        double avgKelvinTemp = sumOfTemp/ numberOfTemp;
-        double avgCelsiusTemp = avgKelvinTemp -KELVIN_CELSIUS_TEMP_DIFFERENCE;
-        return Math.round((float)avgCelsiusTemp);
+        double avgKelvinTemp = sumOfTemp / numberOfTemp;
+        double avgCelsiusTemp = avgKelvinTemp - KELVIN_CELSIUS_TEMP_DIFFERENCE;
+        return Math.round((float) avgCelsiusTemp);
     }
 
-    private void checkIntervalParameters(FiveDaysForecast fiveDaysForecast, LocalDateTime startDateTime, LocalDateTime endDateTime){
+    private void checkIntervalParameters(FiveDaysForecast fiveDaysForecast, LocalDateTime startDateTime, LocalDateTime endDateTime) {
 
         LocalDateTime firstStartDateTime = getFirstDateTime(fiveDaysForecast);
 
-        if(startDateTime.isBefore(LocalDateTime.now() )|| endDateTime.isBefore(LocalDateTime.now())){
+        if (startDateTime.isBefore(LocalDateTime.now()) || endDateTime.isBefore(LocalDateTime.now())) {
             throw new InvalidIntervalParametersException("Interval parameters can't be in past.");
         }
         if (startDateTime.isAfter(endDateTime) || startDateTime.isEqual(endDateTime)) {
@@ -70,8 +70,8 @@ public class ThreeHourlyForecastServiceImpl implements ThreeHourlyForecastServic
             throw new InvalidIntervalParametersException("End date must be within 5 days from start date");
         }
 
-        if(startDateTime.isBefore(firstStartDateTime)){
-            throw new InvalidIntervalParametersException("Start time must be after "+ firstStartDateTime );
+        if (startDateTime.isBefore(firstStartDateTime)) {
+            throw new InvalidIntervalParametersException("Start time must be after " + firstStartDateTime);
         }
     }
 

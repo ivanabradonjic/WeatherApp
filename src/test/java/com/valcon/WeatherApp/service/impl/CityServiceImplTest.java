@@ -39,17 +39,17 @@ class CityServiceImplTest {
         when(cityRepository.findByName("Belgrade")).thenReturn(Optional.of(city));
 
         City result = cityServiceImpl.getByName("Belgrade");
-        Assertions.assertEquals(city,result);
+        Assertions.assertEquals(city, result);
     }
+
     @Test
     void getByName_WhenCityNameNotFound_ShouldThrowException() {
 
         when(cityRepository.findByName("Valjevo")).thenReturn(Optional.empty());
         Assertions.assertThrows(EntityNotFoundException.class, () -> {
-           cityServiceImpl.getByName("Valjevo");
+            cityServiceImpl.getByName("Valjevo");
         });
     }
-
 
 
     @Test
@@ -60,7 +60,7 @@ class CityServiceImplTest {
         when(cityServiceImpl.getAllCities()).thenReturn(cities);
         mockStatic(CityMapper.class);
 
-        CityResponseDTO dto1 = new CityResponseDTO(Long.valueOf(1),"Belgrade");
+        CityResponseDTO dto1 = new CityResponseDTO(Long.valueOf(1), "Belgrade");
         CityResponseDTO dto2 = new CityResponseDTO(Long.valueOf(2), "Novi Sad");
         when(CityMapper.mapToDTO(city1)).thenReturn(dto1);
         when(CityMapper.mapToDTO(city2)).thenReturn(dto2);
@@ -84,6 +84,7 @@ class CityServiceImplTest {
         assertEquals("Belgrade", result.get(0).getName());
         assertEquals("Novi Sad", result.get(1).getName());
     }
+
     @Test
     void getAllCities_WhenCitiesNotFound_ShouldThrowException() {
 
@@ -94,24 +95,23 @@ class CityServiceImplTest {
     }
 
 
-
-
     @Test
     void getById() {
-            City city = new City();
-            city.setId(Long.valueOf(1));
-            when(cityRepository.findById(Long.valueOf(1))).thenReturn(Optional.of(city));
+        City city = new City();
+        city.setId(Long.valueOf(1));
+        when(cityRepository.findById(Long.valueOf(1))).thenReturn(Optional.of(city));
 
-            City result = cityServiceImpl.getById(Long.valueOf(1));
-            Assertions.assertEquals(city,result);
-        }
-        @Test
-        void getById_WhenCityIdNotFound_ShouldThrowException() {
+        City result = cityServiceImpl.getCityById(Long.valueOf(1));
+        Assertions.assertEquals(city, result);
+    }
 
-            when(cityRepository.findById(Long.valueOf(4))).thenReturn(Optional.empty());
-            Assertions.assertThrows(EntityNotFoundException.class, () -> {
-                cityServiceImpl.getById(Long.valueOf(4));
-            });
-        }
+    @Test
+    void getById_WhenCityIdNotFound_ShouldThrowException() {
+
+        when(cityRepository.findById(Long.valueOf(4))).thenReturn(Optional.empty());
+        Assertions.assertThrows(EntityNotFoundException.class, () -> {
+            cityServiceImpl.getById(Long.valueOf(4));
+        });
+    }
 
 }

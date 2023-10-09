@@ -7,5 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
 public interface FiveDaysForecastRepository extends JpaRepository<FiveDaysForecast,Long> {
-    Optional<FiveDaysForecast> findByCity(City city);
+    FiveDaysForecast findByCity(City city);
 }

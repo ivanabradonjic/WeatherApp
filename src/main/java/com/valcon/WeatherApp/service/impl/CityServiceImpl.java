@@ -21,9 +21,9 @@ public class CityServiceImpl implements CityService {
     }
 
     @Override
-    public CityResponseDTO getByName(String name) {
+    public City getByName(String name) {
         City foundedCity = cityRepository.findByName(name).orElseThrow(() -> new ResourceNotFoundException("City with name"+name+"hasn't been found"));
-        return CityMapper.mapToDTO(foundedCity);
+        return foundedCity;
     }
 
     @Transactional(readOnly = true)

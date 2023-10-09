@@ -28,18 +28,6 @@ public interface CityControllerApi {
     })
     CityResponseDTO getById(@Parameter(description = "Id of city to be found") Long id);
 
-    @Operation(summary = "Find city by name.")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "City with requested name found.",
-                    content = { @Content(mediaType = "application/json", schema = @Schema(implementation = CityResponseDTO.class))}),
-            @ApiResponse(responseCode = "404", description = "City with this id not found.",
-                    content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponseDTO.class))})
-    })
-    CityResponseDTO getByName(@Parameter(description = "Name of city to be found") String name);
-
-
-
-
 
 
 }

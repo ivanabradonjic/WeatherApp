@@ -25,7 +25,7 @@ public interface FiveDaysForecastControllerApi {
             @ApiResponse(responseCode = "400", description = "Invalid time interval parameters",
                     content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponseDTO.class))})
     })
-    CityAvgTempResponseDTO averageTemperatureByCity(@Parameter(description = "Id of city to be used to calculate average temperature") Long id, @Parameter(description = "Time interval parameters in format LocalDateTime") TimeIntervalParametersDTO timeIntervalParametersDTO);
+    CityAvgTempResponseDTO averageTemperatureByCity(@Parameter(description = "Name of city to be used to calculate average temperature") String name, @Parameter(description = "Time interval parameters in format LocalDateTime") TimeIntervalParametersDTO timeIntervalParametersDTO);
 
     @Operation(summary = "Find average temperature for all cities in time interval")
     @ApiResponses(value = {

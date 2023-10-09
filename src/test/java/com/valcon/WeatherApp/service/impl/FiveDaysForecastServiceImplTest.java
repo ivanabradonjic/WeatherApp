@@ -46,9 +46,6 @@ class FiveDaysForecastServiceImplTest {
     private FiveDaysForecastServiceImpl fiveDaysForecastServiceImpl;
 
 
-
-
-
     @Test
     void getFiveDaysForecastFromOwm() {
 
@@ -112,9 +109,9 @@ class FiveDaysForecastServiceImplTest {
         LocalDateTime startDateTime = LocalDateTime.now().plusHours(3);
         LocalDateTime endDateTime = LocalDateTime.now().plusHours(6);
 
-        City city = new City("Belgrade","sr");
+        City city = new City("Belgrade", "sr");
         FiveDaysForecast fiveDaysForecast = new FiveDaysForecast(city);
-        TimeIntervalParametersDTO timeIntervalParametersDTO = new TimeIntervalParametersDTO(startDateTime,endDateTime);
+        TimeIntervalParametersDTO timeIntervalParametersDTO = new TimeIntervalParametersDTO(startDateTime, endDateTime);
         int expectedAvgTemp = 14;
 
         mockStatic(CityAvgTempMapper.class);
@@ -131,15 +128,13 @@ class FiveDaysForecastServiceImplTest {
     }
 
 
-
-
     @Test
     void allCityAverageTemperatures() {
         LocalDateTime startDateTime = LocalDateTime.now().plusHours(3);
         LocalDateTime endDateTime = LocalDateTime.now().plusHours(6);
-        TimeIntervalParametersDTO timeIntervalParametersDTO = new TimeIntervalParametersDTO(startDateTime,endDateTime);
+        TimeIntervalParametersDTO timeIntervalParametersDTO = new TimeIntervalParametersDTO(startDateTime, endDateTime);
         City city2 = new City("Belgrade", "sr");
-        City city3= new City("London", "uk");
+        City city3 = new City("London", "uk");
         City city1 = new City("Novi Sad", "sr");
 
         FiveDaysForecast fiveDaysForecast1 = new FiveDaysForecast(city1);
@@ -147,12 +142,11 @@ class FiveDaysForecastServiceImplTest {
         FiveDaysForecast fiveDaysForecast3 = new FiveDaysForecast(city3);
 
 
-
         CityAvgTempResponseDTO city1AvgTempResponse = new CityAvgTempResponseDTO("Novi Sad", 14);
         CityAvgTempResponseDTO city2AvgTempResponse = new CityAvgTempResponseDTO("Belgrade", 14);
         CityAvgTempResponseDTO city3AvgTempResponse = new CityAvgTempResponseDTO("London", 17);
 
-        List<City> cities = Arrays.asList(city1, city2,city3);
+        List<City> cities = Arrays.asList(city1, city2, city3);
         when(cityServiceImpl.getAllCities()).thenReturn(cities);
 
         when(fiveDaysForecastRepository.findByCity(city1)).thenReturn(fiveDaysForecast1);
@@ -173,11 +167,10 @@ class FiveDaysForecastServiceImplTest {
         assertNotNull(result);
         assertEquals(3, result.size());
 
-       assertTrue(result.get(0).getCityAvgTemp() <= result.get(1).getCityAvgTemp());
+        assertTrue(result.get(0).getCityAvgTemp() <= result.get(1).getCityAvgTemp());
 
 
     }
-
 
 
 }

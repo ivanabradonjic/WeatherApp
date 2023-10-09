@@ -29,8 +29,5 @@ public class CityController implements CityControllerApi {
         return cityService.getById(id);
     }
 
-    @GetMapping("/{name}")
-    public CityResponseDTO getByName(@PathVariable String name){
-        return cityService.getByName(name);
-    }
+
 }

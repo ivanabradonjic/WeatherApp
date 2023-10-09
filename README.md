@@ -7,7 +7,7 @@ The following technologies were used in this project:
 * Spring Boot
 * Hibernate
 * Spring Security
-* H2
+* H2 database
 * Swagger
 
 ## Usage

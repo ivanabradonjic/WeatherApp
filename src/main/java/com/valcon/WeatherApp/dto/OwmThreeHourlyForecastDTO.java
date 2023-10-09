@@ -8,6 +8,14 @@ public class OwmThreeHourlyForecastDTO {
     @JsonProperty("dt_txt")
     private String dateTime;
 
+    public OwmThreeHourlyForecastDTO() {
+    }
+
+    public OwmThreeHourlyForecastDTO(MainInfoDTO main, String dateTime) {
+        this.main = main;
+        this.dateTime = dateTime;
+    }
+
     public MainInfoDTO getMain() {
         return main;
     }
@@ -15,4 +23,5 @@ public class OwmThreeHourlyForecastDTO {
     public String getDateTime() {
         return dateTime;
     }
+
 }

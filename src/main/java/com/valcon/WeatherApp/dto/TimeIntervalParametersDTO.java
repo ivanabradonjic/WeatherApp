@@ -23,6 +23,11 @@ public class TimeIntervalParametersDTO implements Serializable {
         return startDateTime;
     }
 
+    public TimeIntervalParametersDTO(LocalDateTime startDateTime, LocalDateTime endDateTime) {
+        this.startDateTime = startDateTime;
+        this.endDateTime = endDateTime;
+    }
+
     public void setStartDateTime(LocalDateTime startDateTime) {
         this.startDateTime = startDateTime;
     }

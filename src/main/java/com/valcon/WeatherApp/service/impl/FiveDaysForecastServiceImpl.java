@@ -5,12 +5,9 @@ import com.valcon.WeatherApp.dto.CityAvgTempResponseDTO;
 import com.valcon.WeatherApp.dto.TimeIntervalParametersDTO;
 import com.valcon.WeatherApp.dto.OwmFiveDaysForecastDTO;
 import com.valcon.WeatherApp.dto.OwmThreeHourlyForecastDTO;
-import com.valcon.WeatherApp.exception.BusinessLogicException;
-import com.valcon.WeatherApp.exception.ResourceNotFoundException;
 import com.valcon.WeatherApp.mapper.CityAvgTempMapper;
 import com.valcon.WeatherApp.model.City;
 import com.valcon.WeatherApp.model.FiveDaysForecast;
-import com.valcon.WeatherApp.model.ThreeHourlyForecast;
 import com.valcon.WeatherApp.repository.FiveDaysForecastRepository;
 import com.valcon.WeatherApp.service.CityService;
 import com.valcon.WeatherApp.service.FiveDaysForecastService;
@@ -75,13 +72,9 @@ public class FiveDaysForecastServiceImpl implements FiveDaysForecastService {
 
         FiveDaysForecast fiveDaysForecast = new FiveDaysForecast(city);
         fiveDaysForecastRepository.save(fiveDaysForecast);
-
         for (OwmThreeHourlyForecastDTO owmThreeHourlyForecastDTO : owmFiveDaysForecastDTO.getOwmThreeHourlyForecastDTOList()) {
 
-            ThreeHourlyForecast savedThreeHourlyForecast = threeHourlyForecastService.saveOne(owmThreeHourlyForecastDTO, fiveDaysForecast);
-            if(savedThreeHourlyForecast == null){
-                throw new BusinessLogicException("Three hourly forecast hasn't saved");
-            }
+            threeHourlyForecastService.saveOne(owmThreeHourlyForecastDTO, fiveDaysForecast);
         }
 
     }
@@ -91,7 +84,7 @@ public class FiveDaysForecastServiceImpl implements FiveDaysForecastService {
         List<City> allCities = cityService.getAllCities();
         double averageTemperature=0.0;
         for(City city: allCities){
-           CityAvgTempResponseDTO cityAvgTempResponseDTO= averageTemperatureByCity(city.getId(), timeIntervalParametersDTO);
+           CityAvgTempResponseDTO cityAvgTempResponseDTO= averageTemperatureByCity(city.getName(), timeIntervalParametersDTO);
            allCitiesAvgTempResponseDTO.add(cityAvgTempResponseDTO);
 
         }
@@ -99,18 +92,15 @@ public class FiveDaysForecastServiceImpl implements FiveDaysForecastService {
         return allCitiesAvgTempResponseDTO;
 
     }
-    public CityAvgTempResponseDTO averageTemperatureByCity(Long cityId, TimeIntervalParametersDTO timeIntervalParametersDTO){
-        City foundedCity = cityService.getCityById(cityId);
-        FiveDaysForecast foundedFiveDaysForecast = fiveDaysForecastRepository.findByCity(foundedCity).orElseThrow(()-> new ResourceNotFoundException("Five days forecast not found"));
+    public CityAvgTempResponseDTO averageTemperatureByCity(String name, TimeIntervalParametersDTO timeIntervalParametersDTO){
+        City foundedCity = cityService.getByName(name);
+        FiveDaysForecast foundedFiveDaysForecast = fiveDaysForecastRepository.findByCity(foundedCity);
         LocalDateTime startDateTime = timeIntervalParametersDTO.getStartDateTime();
         LocalDateTime endDateTime = timeIntervalParametersDTO.getEndDateTime();
-       /* DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        LocalDateTime startDateTime = LocalDateTime.parse(timeIntervalParametersDTO.getStartDateTime(), formatter);
-        LocalDateTime endDateTime = LocalDateTime.parse(timeIntervalParametersDTO.getEndDateTime(), formatter);*/
-        double cityAvgTemp = threeHourlyForecastService.averageTemperatureInInterval(foundedFiveDaysForecast,startDateTime,endDateTime);
+
+        int cityAvgTemp = threeHourlyForecastService.averageTemperatureInInterval(foundedFiveDaysForecast,startDateTime,endDateTime);
         return CityAvgTempMapper.mapToDTO(foundedCity.getName(),cityAvgTemp);
     }
-
 
 
 }

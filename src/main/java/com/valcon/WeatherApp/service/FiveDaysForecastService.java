@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface FiveDaysForecastService {
 
-    public CityAvgTempResponseDTO averageTemperatureByCity(Long cityId, TimeIntervalParametersDTO timeIntervalParametersDTO);
+    public CityAvgTempResponseDTO averageTemperatureByCity(String name, TimeIntervalParametersDTO timeIntervalParametersDTO);
     public List<CityAvgTempResponseDTO> allCityAverageTemperatures(TimeIntervalParametersDTO timeIntervalParametersDTO);
 
 }

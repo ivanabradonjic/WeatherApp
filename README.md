@@ -12,6 +12,7 @@ The following technologies were used in this project:
 ## Usage
 
 Once the application is running, you can access it by navigating to http://localhost:8080 in your web browser. 
+OpenApi specification can be seen on http://localhost:8080/swagger-ui/index.html
 
 
 
